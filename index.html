@@ -294,13 +294,43 @@
                     <img src="img/logo2.png" alt="IMS - Powered by ISM" class="banner-image wow fadeInUp">
                 </div>
                 
-                <form action="search_results.html" method="GET" class="header_search_form">
-                        <div class="header_search_form_info">
+                <form action="search_results.html" method="GET" class="header_search_form" enctype="multipart/form-data">
+                    <div class="header_search_form_info">
                             <div class="form-group">
-                                <div class="input-wrapper">
+                                <div class="input-wrapper" style="position: relative;">
                                     <i class="icon_search"></i>
                                     <input type='search' id="searchbox" autocomplete="off" name="search"
                                         placeholder="type here to search" />
+                                    <input type="file" id="imageSearch" name="imageSearch" accept="image/*" style="display: none;" onchange="handleImageSearch(event)" />
+                                    <label for="imageSearch" class="image-search-icon" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Google_Lens_Icon.svg" alt="Image Search" style="width: 24px; height: 24px;">
+                                    </label>
+                                    <script>
+                                        function handleImageSearch(event) {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                                const formData = new FormData();
+                                                formData.append('image', file);
+
+                                                fetch('image_search_api_endpoint', {
+                                                    method: 'POST',
+                                                    body: formData
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.results && data.results.length > 0) {
+                                                        window.open(data.results[0].url, '_blank');
+                                                    } else {
+                                                        alert('No matches found.');
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                    alert('An error occurred while searching for the image.');
+                                                });
+                                            }
+                                        }
+                                    </script>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -394,7 +424,11 @@
                                     <li>+2</li>
                                 </ul>
                                 <div class="text">
-                                    Secure profile updates<br> Managed by the ISM Team
+                                    <p>
+                                        <strong>Secure profile updates</strong><br>
+                                        Managed by the <span class="highlight">ISM Team</span>
+                                    </p>
+                                    <a href="contact.html" class="btn btn-primary mt-2">Contact Us</a>
                                 </div>
                             </div>
                         </div>
@@ -494,8 +528,9 @@
                         <li><a href="https://isminspire.tv" target="_blank">LIVE TV</a></li>
 
                     </ul>
-                    <p class="wow fadeInUp" data-wow-delay="0.3s">© 2025 All Rights Reserved Design by
-                        <span>ISM Inspire TV</span>
+                    <p class="wow fadeInUp" data-wow-delay="0.3s">© 2025 All Rights Reserved. Designed with ❤️ by 
+                        <a href="https://isminspire.tv" target="_blank" rel="noopener noreferrer">ISM Inspire TV</a>.
+                    </p>
                     </p>
                 </div>
             </div>
